@@ -21,7 +21,7 @@ class Metric(ContextAwareMixin):
                     y_true: Iterable,
                     axis: Optional[int] = None,
                     **kwargs) -> ScoreResult:
-        y_predicted = context.models[model_name].model.predict(X)
+        y_predicted = self.context.models[model_name].predict(X)
         if axis:
-            y_predicted[:axis]
+            y_predicted = y_predicted[:axis]
         return self.score(y_true, y_predicted)

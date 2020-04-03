@@ -22,8 +22,12 @@ class Factory:
                                   **step_config)
         except Exception as err:
             # Log error for clarity
-            logging.error("Error creating instance of %s (%s): %s",
-                          instance_class.__name__, name, err)
+            if instance_class is None:
+                logging.error(
+                    'Step instance is None. Check get_instance method.')
+            else:
+                logging.error("Error creating instance of %s (%s): %s",
+                              instance_class.__name__, name, err)
             raise err
         return step
 
