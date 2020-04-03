@@ -136,3 +136,8 @@ data/ST0307/
 # Archives
 *.tgz
 *.tar.gz
+sandbox/
+third/
+tmp/
+data/
+*.root

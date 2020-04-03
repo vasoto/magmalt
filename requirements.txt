@@ -1,2 +1,12 @@
-numpy
-pandas
+numpy>1.17
+numexpr
+pandas>1.0
+sklearn
+tqdm
+pyyaml>5.0
+pydantic
+uproot>=3.0.0b2
+colorama
+coloredlogs
+tensorflow>2.0.0
+xgboost>=1.0.2
