@@ -21,6 +21,7 @@ class MyFactory(Factory):
                 raise ValueError("TestMessage")
 
 
+@pytest.mark.core
 def test_factory__init():
     factory = Factory(context=None, config_section='tests')
     assert factory.context is None
@@ -28,6 +29,7 @@ def test_factory__init():
     assert factory.steps == []
 
 
+@pytest.mark.core
 def test_factory__get_instance():
     factory = Factory(None, '')
     with pytest.raises(NotImplementedError) as excinfo:
@@ -38,6 +40,7 @@ def test_factory__get_instance():
     assert test_factory.get_instance(None, {'foo': 1}) == MyStep
 
 
+@pytest.mark.core
 def test_factory__create_step():
     factory = MyFactory(context=dict(context=None), config_section='')
     step = factory.create_step(name='new step', step_config={'foo': 'bar'})
@@ -57,6 +60,7 @@ data = dict(tests=dict(first_step=dict(foo='bar'), second_step=dict(
     foo='zap')))
 
 
+@pytest.mark.core
 def test_factory__create_all():
     factory = MyFactory(context=dict(context=None), config_section='tests')
     factory.create_all(data)

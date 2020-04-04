@@ -17,6 +17,7 @@ class MyContext:
         self.models = dict(my_model=MyModel())
 
 
+@pytest.mark.core
 def test_metric__init():
     context = MyContext()
     metric = Metric('TestMetric', context=context, score_func=my_score_func)
@@ -25,12 +26,14 @@ def test_metric__init():
     assert metric.score_func == my_score_func
 
 
+@pytest.mark.core
 def test_metric__score():
     context = MyContext()
     metric = Metric('TestMetric', context=context, score_func=my_score_func)
     assert all(metric.score([1, 2, 3, 4], [1, 2, 3, 4]))
 
 
+@pytest.mark.core
 def test_metric__score_model():
     context = MyContext()
     metric = Metric('TestMetric', context=context, score_func=my_score_func)

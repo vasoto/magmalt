@@ -2,7 +2,7 @@ import os
 
 import setuptools
 
-VERSION = '0.0.2'
+VERSION = '0.0.3a'
 
 here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, "README.md"), "r") as fh:
@@ -35,7 +35,7 @@ setuptools.setup(
     ],
     extras_require={  # Optional
         'dev': ['yapf'],
-        'tests': ['pytest', 'pytest-cov', 'coverage'],
+        'tests': ['pytest', 'pytest-cov', 'coverage', 'mock', 'pytest-mock'],
         'xgboost': ['xgboost>=1.0.2'],
         'keras': ['tensorflow>2.0.0']
     },

@@ -1,3 +1,5 @@
+import pytest
+
 from magmalt.core import Context, ContextAwareMixin
 
 
@@ -6,6 +8,7 @@ class ContextAwareMixinTest(ContextAwareMixin):
         super().__init__(context=context, name='test_class')
 
 
+@pytest.mark.core
 def test_context_init():
     c = Context()
     assert c.steps == {}
@@ -14,6 +17,7 @@ def test_context_init():
     assert c.owner is None
 
 
+@pytest.mark.core
 def test_context_aware():
     c = ContextAwareMixinTest(Context())
     assert c.name == 'test_class'
