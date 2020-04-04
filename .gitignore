@@ -139,5 +139,5 @@ data/ST0307/
 sandbox/
 third/
 tmp/
-data/
+./data/
 *.root
