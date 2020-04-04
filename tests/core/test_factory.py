@@ -10,13 +10,24 @@ class MyStep:
         self.foo = foo
 
 
+class BrokenStep:
+    def __init__(self, context, name: str, foo=None):
+        self.name = name
+        self.context = context
+        self.foo = foo
+        raise AttributeError("Test Exception in step creation")
+
+
 class MyFactory(Factory):
     def get_instance(self, name, config):
         if config and 'foo' in config:  # add some logic
-            if config['foo'] is not None:
-                return MyStep
-            elif config['foo'] == 'partial':
+
+            if config['foo'] == 'partial':
                 return partial(MyStep)
+            elif config['foo'] == 'broken':
+                return BrokenStep
+            elif config['foo'] is not None:
+                return MyStep
             else:
                 raise ValueError("TestMessage")
 
@@ -51,9 +62,15 @@ def test_factory__create_step():
     with pytest.raises(ValueError) as excinfo:
         factory.create_step(name='new_step', step_config=dict(foo=None))
         assert excinfo.value == 'TestMessage'
-    with pytest.raises(TypeError) as excinfo:
+
+    with pytest.raises(TypeError, match="'NoneType' object is not callable"):
         factory.create_step(name='failing step', step_config=None)
-        assert excinfo.value == "TypeError: 'NoneType' object is not callable"
+
+    with pytest.raises(AttributeError,
+                       match="Test Exception in step creation"):
+        res = factory.create_step(name='failing step(construction)',
+                                  step_config={'foo': 'broken'})
+        print(res)
 
 
 data = dict(tests=dict(first_step=dict(foo='bar'), second_step=dict(
