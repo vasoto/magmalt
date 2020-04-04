@@ -13,8 +13,8 @@ setuptools.setup(
     version=VERSION,
     author="Vassil Verguilov",
     author_email="Vassil.Verguilov@gmail.com",
-    description=
-    "Simple Machine Learning pipeline tools for Major Atmospheric Gamma Imaging Cherenkov Telescopes",
+    description="Simple Machine Learning pipeline tools for "
+    "Major Atmospheric Gamma Imaging Cherenkov Telescopes",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/pypa/sampleproject",
@@ -34,7 +34,7 @@ setuptools.setup(
         'coloredlogs',
     ],
     extras_require={  # Optional
-        'dev': ['yapf'],
+        'dev': ['yapf', 'mccabe', 'pylint', 'flake8'],
         'tests': ['pytest', 'pytest-cov', 'coverage', 'mock', 'pytest-mock'],
         'xgboost': ['xgboost>=1.0.2'],
         'keras': ['tensorflow>2.0.0']
