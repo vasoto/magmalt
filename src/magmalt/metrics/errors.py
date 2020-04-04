@@ -1,5 +1,6 @@
 from functools import partial
-from sklearn.metrics import mean_absolute_error, mean_squared_error, median_absolute_error
+from sklearn.metrics import mean_absolute_error, \
+    mean_squared_error, median_absolute_error
 
 from magmalt.core import Metric
 
