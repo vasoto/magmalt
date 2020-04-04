@@ -1,6 +1,7 @@
 import ast
 import logging
 from typing import List
+# from magmalt.core import Dataset
 
 
 class GenericVisitor(ast.NodeVisitor):
@@ -46,7 +47,7 @@ class FeaturesMixin:
             # Handle strings
             if isinstance(value, str):
                 value = [value]
-            #TODO: Flatten lists of lists. Use case?
+            # TODO: Flatten lists of lists. Use case?
             values += value
         return values
 

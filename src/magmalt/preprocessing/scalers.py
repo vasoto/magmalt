@@ -1,12 +1,11 @@
 import logging
-from typing import List, NoReturn, Dict, Any
+from typing import List, Dict
 
 from sklearn.preprocessing import MinMaxScaler as MinMaxScaler_
 import pandas as pd
 from pydantic import BaseModel
 
 from magmalt.core.step import Step
-from magmalt.utils.features_mixin import FeaturesMixin, FeaturesParser
 
 logger = logging.getLogger('scalers')
 
@@ -52,7 +51,7 @@ class InverseScaler(Step):
             "Store inverse scaled data from dataset %s into dataset %s",
             self.scaled_dataset, self.results)
         # scaler_data = self.context.steps[self.scaler_step]
-        if not self.dataset in self.context.datasets:
+        if self.dataset not in self.context.datasets:
             logger.error("Missing dataset '%s'. Cannot perform step %s",
                          self.dataset, self.name)
             return False
@@ -94,7 +93,7 @@ class MinMaxScaler(ScalerStep):
         scaler_params
 
     def scale(self, data):
-        return self.scaler.fit_transform(dataset.data)
+        return self.scaler.fit_transform(data)
 
     def inverse_scale(self, dataset_name, data):
         params = self.context.steps[self.name][dataset_name]

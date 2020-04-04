@@ -34,7 +34,6 @@ class MarsFilters(Step, FeaturesMixin):
 
         self.features = FeaturesParser(self.filters).parse()
         logger.debug("Filters parsed")
-        result = True
         for dataset_name in self.datasets:
             print("Dataset:", dataset_name)
             dataset = self.context.datasets[dataset_name]
@@ -54,8 +53,8 @@ class MarsFilters(Step, FeaturesMixin):
                 # Check if data correctly referenced
                 count_after = self.context.datasets[dataset_name].data.shape[0]
                 logger.info(
-                    "%d events left in dataset \"%s\" after applying filters. %d events removed. (Original size was %d)",
-                    count_after, dataset_name, count_before - count_after,
-                    count_before)
-
+                    "%d events left in dataset \"%s\" "
+                    "after applying filters. %d events removed. "
+                    "(Original size was %d)", count_after, dataset_name,
+                    count_before - count_after, count_before)
         return True

@@ -38,7 +38,8 @@ class StepsFactory(Factory):
 #         instance_cls = Instances.get(instance, None)
 #         if instance_cls is None:
 #             raise ValueError(
-#                 f"'{instance}' instance is not defined in Instances for step "
+#                 f"'{instance}' instance is not defined in "
+#                  "Instances for step "
 #                 f"{step_name}")
 #         return instance_cls(name=step_name,
 #                             context=self.context,
@@ -48,5 +49,6 @@ class StepsFactory(Factory):
 #         steps = []
 #         for step_name, step_config in steps_config.items():
 #             steps.append(
-#                 self.create_step(step_name=step_name, step_config=step_config))
+#                 self.create_step(step_name=step_name,
+#                                   step_config=step_config))
 #         return steps

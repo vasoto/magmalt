@@ -1,3 +1,4 @@
+# pragma: no cover
 from .preprocessing.mars_filter import MarsFilters
 from .preprocessing import MinMaxScaler, InverseScaler
 from .models.trainers import KerasModelTrainer, XGBoostModelTrainer

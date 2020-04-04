@@ -1,6 +1,6 @@
 from collections import OrderedDict
 import re
-from typing import OrderedDict, Callable
+from typing import Callable
 
 from magmalt.core.dataset import Dataset
 
@@ -24,24 +24,25 @@ class SanitizedFeaturesContext:
     completed.
     Example:
     # Apply
-    with SanitizedFeaturesContext(dataset=context.datasts['energy]) as data_context:
+    with SanitizedFeaturesContext(dataset=context.datasts['energy]) as \
+        data_context:
         for func in functions:
             try:
                 sanitized_name = data_context.sanitize(func)
-                context.data[sanitized_name] = data_context.data.apply(func) 
+                context.data[sanitized_name] = data_context.data.apply(func)
             except Exception as err:
                 logging.error("Could not apply function %s", func)
                 raise err
             else:
                 data_context.sanitized_features[sanitized_name] = func
-    
+
     # Query
     with SanitizedFeaturesContext(dataset=context) as data_context:
         all_filters = ''
         filter_ = " && ".join([data_context.sanitize(f)
                                    for f in filters])
         data_context.query(filter_, inplace=True)
-        
+
     In both examples, after exiting this context, the column names are resotred
     to the original.
 

@@ -1,4 +1,4 @@
-from magmalt.core import ContextAwareMixin, Step
+from magmalt.core import ContextAwareMixin
 from magmalt.utils.features_mixin import FeaturesMixin
 
 

@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import logging
+from typing import Dict
 
 from magmalt.core import ContextAwareMixin, Context
 from magmalt.models.model_builder import ModelBuilder
@@ -18,14 +19,6 @@ class Pipeline(ContextAwareMixin):
         super().__init__(context=context, name=name)
         self.context.owner = self
         self.steps: Dict[str, "Step"] = dict()
-
-    @classmethod
-    def _create_steps(cls, config, context):
-        steps = [
-            Step.create(name=step_name, context=context, config=step_config)
-            for step_name, step_config in config.pop('steps', {}).items()
-        ]
-        return steps
 
     @staticmethod
     def _create_steps(config, context):
@@ -73,8 +66,8 @@ class Pipeline(ContextAwareMixin):
                              method_name, step.name, str(err))
             if not result:
                 logger.warning(
-                    "%s method did not succeed for step %s. Stopping pipeline.",
-                    method_name, step.name)
+                    "%s method did not succeed for step %s. "
+                    "Stopping pipeline.", method_name, step.name)
                 return False
         return True
 
