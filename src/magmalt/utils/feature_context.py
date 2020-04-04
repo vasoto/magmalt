@@ -1,6 +1,6 @@
 from collections import OrderedDict
 import re
-from typing import Callable
+from typing import Callable, OrderedDict as OrderedDictType
 
 from magmalt.core.dataset import Dataset
 
@@ -50,7 +50,7 @@ class SanitizedFeaturesContext:
     def __init__(self,
                  dataset: Dataset,
                  sanitizer: Callable[[str], str] = sanitize_column_name):
-        self.sanitized_features: OrderedDict[str, str] = OrderedDict()
+        self.sanitized_features: OrderedDictType[str, str] = OrderedDict()
         self.dataset = dataset
         self.sanitizer = sanitizer
 
