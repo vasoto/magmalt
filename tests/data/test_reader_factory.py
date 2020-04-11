@@ -34,15 +34,18 @@ def test_reader_factory__get_instance_from_files():
 def test_reader_factory__get_instance_exceptions():
     factory = ReaderFactory(dict(context=None))
 
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(ValueError,
+                       match="Neither of dataset properties 'files' nor "
+                       "'reader' is set for dataset empty_config"):
         factory.get_instance('empty_config', {})
-        assert excinfo.value == "ValueError: Neither of dataset properties 'files' nor 'reader' is set for dataset empty_config"
 
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(ValueError,
+                       match="Cannot extract file extension for "
+                       "file_name_without_extension for dataset no_extension"):
         factory.get_instance('no_extension',
                              {'files': 'file_name_without_extension'})
-        assert excinfo.value == "ValueError: Cannot extract file extension for file_name_without_extension for dataset no_extension"
 
-    with pytest.raises(ValueError) as excinfo:
+    with pytest.raises(ValueError,
+                       match="Cannot determine reader for dataset "
+                       "unknown_extension"):
         factory.get_instance('unknown_extension', {'files': 'file.ext'})
-        assert excinfo.value == "ValueError: Cannot determine reader for dataset unknown_extension"

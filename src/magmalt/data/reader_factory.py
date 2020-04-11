@@ -17,6 +17,11 @@ class ReaderFactory(Factory):
         super().__init__(context=context, config_section='datasets')
 
     def get_instance(self, dataset_name, dataset_config):
+        """ Get instance of a reader based on dataset's `files` or `reader`
+        properties.
+        If `files` is used, te extension of the files is used as a hint which
+        reader to be used.
+        """
         logger.debug("Configure reader for dataset %s", dataset_name)
         reader = Readers.get(dataset_config.pop('reader', None), None)
         if reader is None:
@@ -33,6 +38,7 @@ class ReaderFactory(Factory):
         if reader is None:
             raise ValueError("Cannot determine reader for dataset "
                              f"{dataset_name}")
+        # Crete a partial, so `dataset` property can be set
         reader = partial(reader,
                          dataset=dataset_name,
                          name=f'read_{dataset_name}')
