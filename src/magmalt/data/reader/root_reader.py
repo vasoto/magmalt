@@ -7,6 +7,7 @@ import uproot
 
 from magmalt.core import Step
 from magmalt.utils.features_mixin import FeaturesParser
+from magmalt.utils.feature_context import eval_features
 
 logger = logging.getLogger('root_reader')
 
@@ -52,32 +53,51 @@ class RootReader(Step):
         return True
 
     def get_branches(self):
-        features = self.context.datasets[self.dataset].features
+        """ Extract ROOT branches from features
 
-        branches = FeaturesParser(features).parse()
-        return branches
+        Features could include complex functions or combinations of branches.
+        So we need to extract all branches included in those complex features.
+        """
+        features = self.context.datasets[self.dataset].features
+        return FeaturesParser(features).parse()
 
     def _read_data(self):
+        # Extract all branches
         branches = self.get_branches()
-        # Create data reader generator
+        # Create upROOT data reader generator
         data_gen = uproot.iterate(self.files,
                                   treepath=self.tree,
                                   branches=branches,
                                   outputtype=pd.DataFrame,
                                   reportentries=True)
-        # Create progress bar
+        # Create tqdm visual progress bar
         progress = tqdm(total=self.nevents, unit='events', unit_scale=True)
-        chunks = []
+        chunks = []  # will hold extracted Pandas' DataFrame objects
+        # Loop over ROOT file data
         for start, stop, data_chunk in data_gen:
             progress.update(stop - start)
             chunks.append(data_chunk)
-        progress.close()
+        # Concatenate all DataFrames into one
         self.context.datasets[self.dataset].data = pd.concat(chunks,
                                                              ignore_index=True)
+        progress.close()
+
+    def _eval_features(self):
+        """ Evaluate complex features
+
+        Applies functions and/or complex relations
+        between features
+        """
+        dataset = self.context.datasets[self.dataset]
+        eval_features(dataset)
 
     def run(self):  # pragma: no cover
+        """ Perform data readout from ROOT files
+        """
         try:
             self._read_data()
+            # Create complex features
+            self._eval_features()
         except Exception as err:
             logging.error("Error while reading data for dataset %s: %s",
                           self.dataset, err)
