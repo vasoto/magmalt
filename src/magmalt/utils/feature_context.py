@@ -1,8 +1,14 @@
+import ast
 from collections import OrderedDict
+import logging
 import re
 from typing import Callable, OrderedDict as OrderedDictType
 
+import numpy as np
+
 from magmalt.core.dataset import Dataset
+
+logger = logging.getLogger('feature_context')
 
 
 def sanitize_column_name(column_name: str) -> str:
@@ -80,3 +86,38 @@ class SanitizedFeaturesContext:
 
     def __exit__(self, type, value, traceback):
         self.restore()
+
+
+class InputVisitor(ast.NodeVisitor):
+    def __init__(self):
+        self.container = None
+
+    def visit_Name(self, node):
+        if node.id != 'log10':
+            self.container = node.id
+        return node
+
+
+def eval_features(dataset):
+    with SanitizedFeaturesContext(dataset) as data_context:
+        for feature in dataset.features:
+            sanitized_name = data_context.sanitize(feature)
+            if sanitized_name in data_context.data.columns:
+                continue
+            logger.debug("%s not found in dataset evaluating...",
+                         sanitized_name)
+
+            try:
+                data_context.data[sanitized_name] = data_context.data.eval(
+                    sanitized_name, parser='python', engine='numexpr')
+            except ValueError as err:
+                if 'log10' in feature:
+                    visitor = InputVisitor()
+                    visitor.visit(ast.parse(sanitized_name))
+                    param_name = visitor.container
+                    data_context.data[sanitized_name] = np.log10(
+                        data_context.data[param_name])
+                else:
+                    continue
+            else:
+                data_context.sanitized_features[sanitized_name] = feature
